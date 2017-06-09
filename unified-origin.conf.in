@@ -1,0 +1,51 @@
+# This is the Remix Origin. It handles GET requests and returns a remixed MP4 
+# created from the SMIL requested from the SMIL Proxy.
+
+ServerName remix-origin
+
+LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule unified_remix_module modules/mod_unified_remix.so
+LoadModule unique_id_module modules/mod_unique_id.so
+
+LogFormat {{LOG_FORMAT}} log_format
+
+UspLicenseKey /etc/usp-license.key
+
+<VirtualHost *:80>
+  CustomLog /dev/stdout log_format
+  ErrorLog /dev/stderr
+
+  LogLevel {{LOG_LEVEL}}
+
+  # Change the extension of the request from .mp4 to .smil before handling the
+  # request with ProxyPass.
+  RewriteEngine On
+  RewriteRule "^(.*)\.mp4$" "$1.smil" [PT,L,QSA]
+
+  # Do not get byteranges from the backend. We require an entire, unbroken
+  # response from the backend.
+  RequestHeader unset Range
+
+  #magic to add a unique ID for tracking remix requests
+  RewriteEngine On
+  RewriteCond %{QUERY_STRING} !(?:^|&)remix_request_id
+  RewriteRule (.*) $1?remix_request_id=%{ENV:UNIQUE_ID} [P,QSA,E=REMIX_REQUEST_ID:%{ENV:UNIQUE_ID}]
+
+  RewriteCond %{QUERY_STRING} (?:^|&)remix_request_id=([^&]+)
+  RewriteRule (.*) - [E=REMIX_REQUEST_ID:%1]
+
+  RequestHeader setifempty REMIX_REQUEST_ID %{REMIX_REQUEST_ID}e
+
+  Header set Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+  Header set Access-Control-Allow-Origin "*"
+
+  # This specifies the address to fetch the .smil file from.
+  ProxyPass /remix-origin/ http://smil-proxy/ connectiontimeout=5 timeout=30 disablereuse=on retry=0
+  ProxyPass / http://smil-proxy/
+
+  # Transform the SMIL into a remixed MP4.
+  <LocationMatch "\.smil$">
+    SetOutputFilter "REMIX"
+  </LocationMatch>
+
+</VirtualHost>
