@@ -28,7 +28,7 @@ UspLicenseKey /etc/usp-license.key
   #magic to add a unique ID for tracking remix requests
   RewriteEngine On
   RewriteCond %{QUERY_STRING} !(?:^|&)remix_request_id
-  RewriteRule (.*) $1?remix_request_id=%{ENV:UNIQUE_ID} [P,QSA,E=REMIX_REQUEST_ID:%{ENV:UNIQUE_ID}]
+  RewriteRule (.*) $1?remix_request_id=%{ENV:UNIQUE_ID} [PT,QSA,E=REMIX_REQUEST_ID:%{ENV:UNIQUE_ID}]
 
   RewriteCond %{QUERY_STRING} (?:^|&)remix_request_id=([^&]+)
   RewriteRule (.*) - [E=REMIX_REQUEST_ID:%1]
