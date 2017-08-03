@@ -1,4 +1,4 @@
-FROM unifiedstreaming/origin:1.7.28-d1
+FROM unifiedstreaming/origin:1.7.31
 LABEL maintainer "Unified Streaming <support@unified-streaming.com>"
 
 # install
@@ -22,3 +22,6 @@ RUN apk --update add \
 
 
 COPY unified-origin.conf.in /etc/apache2/conf.d/unified-origin.conf.in
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN chmod +x /usr/local/bin/entrypoint.sh

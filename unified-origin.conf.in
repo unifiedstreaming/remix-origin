@@ -39,8 +39,8 @@ UspLicenseKey /etc/usp-license.key
   Header set Access-Control-Allow-Origin "*"
 
   # This specifies the address to fetch the .smil file from.
-  ProxyPass /remix-origin/ http://smil-proxy/ connectiontimeout=5 timeout=30 disablereuse=on retry=0
-  ProxyPass / http://smil-proxy/
+  ProxyPass /remix-origin/ {{SMIL_URL}} connectiontimeout=5 timeout=30 disablereuse=on retry=0
+  ProxyPass / {{SMIL_URL}}
 
   # Transform the SMIL into a remixed MP4.
   <LocationMatch "\.smil$">
