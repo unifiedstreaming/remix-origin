@@ -1,4 +1,4 @@
-FROM unifiedstreaming/origin:1.8.3
+FROM unifiedstreaming/origin:1.8.4
 LABEL maintainer "Unified Streaming <support@unified-streaming.com>"
 
 # install
@@ -17,7 +17,7 @@ RUN wget -q -O /etc/apk/keys/alpine@unified-streaming.com.rsa.pub \
 
 RUN apk --update add \
       --repository http://apk.unified-streaming.com/repo \
-      mod_unified_remix \
+      mod_unified_remix=1.8.4-r0 \
  && rm -f /var/cache/apk/* 
 
 
