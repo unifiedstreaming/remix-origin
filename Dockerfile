@@ -1,4 +1,4 @@
-FROM unifiedstreaming/origin:1.9.5
+FROM unifiedstreaming/origin:1.10.12
 LABEL maintainer "Unified Streaming <support@unified-streaming.com>"
 
 # install
@@ -13,11 +13,11 @@ RUN sed -i "s/#LoadModule rewrite_module/LoadModule rewrite_module/" /etc/apache
  && sed -i "s/#LoadModule proxy_http_module/LoadModule proxy_http_module/" /etc/apache2/conf.d/proxy.conf
 
 RUN wget -q -O /etc/apk/keys/alpine@unified-streaming.com.rsa.pub \
-  http://apk.unified-streaming.com/alpine@unified-streaming.com.rsa.pub
+  http://stable.apk.unified-streaming.com/alpine@unified-streaming.com.rsa.pub
 
 RUN apk --update add \
-      --repository http://apk.unified-streaming.com/repo \
-      mod_unified_remix=1.9.5-r0 \
+      --repository http://stable.apk.unified-streaming.com/target/repo \
+      mod_unified_remix=1.10.12-r0 \
  && rm -f /var/cache/apk/* 
 
 
