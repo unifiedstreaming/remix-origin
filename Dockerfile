@@ -1,21 +1,32 @@
-FROM unifiedstreaming/origin:1.10.28
+ARG ALPINEVERSION=3.13
+
+FROM unifiedstreaming/origin:1.11.0
 LABEL maintainer "Unified Streaming <support@unified-streaming.com>"
 
-# install
-RUN apk --update add \
-      apache2-proxy \
- && rm -f /var/cache/apk/*
+# ARGs declared before FROM are in a different scope, so need to be stated again
+# https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
+ARG ALPINEVERSION
+ARG BETA_REPO=https://beta.apk.unified-streaming.com/alpine/
+ARG STABLE_REPO=https://stable.apk.unified-streaming.com/alpine/
+ARG VERSION=1.11.0
+
+# Get USP public key
+RUN wget -q -O /etc/apk/keys/alpine@unified-streaming.com.rsa.pub \
+    https://stable.apk.unified-streaming.com/alpine@unified-streaming.com.rsa.pub
 
 # configure
-RUN sed -i "s/#LoadModule rewrite_module/LoadModule rewrite_module/" /etc/apache2/httpd.conf 
+RUN sed -i "s/#LoadModule rewrite_module/LoadModule rewrite_module/" /etc/apache2/httpd.conf
 
 RUN wget -q -O /etc/apk/keys/alpine@unified-streaming.com.rsa.pub \
   http://stable.apk.unified-streaming.com/alpine@unified-streaming.com.rsa.pub
 
-RUN apk --update add \
-      --repository http://stable.apk.unified-streaming.com/alpine/v3.12 \
-      mod_unified_remix=1.10.28-r0 \
- && rm -f /var/cache/apk/* 
+  RUN apk \
+      --update \
+      --repository $BETA_REPO/v$ALPINEVERSION \
+      --repository $STABLE_REPO/v$ALPINEVERSION \
+      add \
+        mod_unified_remix~$VERSION \
+ && rm -f /var/cache/apk/*
 
 
 COPY unified-origin.conf.in /etc/apache2/conf.d/unified-origin.conf.in
