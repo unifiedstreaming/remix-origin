@@ -1,6 +1,6 @@
 ARG ALPINEVERSION=3.13
 
-FROM unifiedstreaming/origin:1.11.0
+FROM unifiedstreaming/origin:1.11.1
 LABEL maintainer "Unified Streaming <support@unified-streaming.com>"
 
 # ARGs declared before FROM are in a different scope, so need to be stated again
@@ -8,7 +8,7 @@ LABEL maintainer "Unified Streaming <support@unified-streaming.com>"
 ARG ALPINEVERSION
 ARG BETA_REPO=https://beta.apk.unified-streaming.com/alpine/
 ARG STABLE_REPO=https://stable.apk.unified-streaming.com/alpine/
-ARG VERSION=1.11.0
+ARG VERSION=1.11.1
 
 # Get USP public key
 RUN wget -q -O /etc/apk/keys/alpine@unified-streaming.com.rsa.pub \
