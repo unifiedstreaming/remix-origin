@@ -30,7 +30,7 @@ RUN wget -q -O /etc/apk/keys/alpine@unified-streaming.com.rsa.pub \
  && rm -f /var/cache/apk/*
 
 
-COPY unified-origin.conf.in /etc/apache2/conf.d/unified-origin.conf.in
+COPY remix-origin.conf.in /etc/apache2/conf.d/remix-origin.conf.in
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN chmod +x /usr/local/bin/entrypoint.sh

@@ -4,7 +4,10 @@
 ServerName remix-origin
 
 LoadModule unified_remix_module modules/mod_unified_remix.so
-LoadModule unique_id_module modules/mod_unique_id.so
+LoadModule unified_s3_auth_module modules/mod_unified_s3_auth.so
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+
 
 LogFormat {{LOG_FORMAT}} log_format
 
@@ -38,9 +41,26 @@ UspLicenseKey /etc/usp-license.key
   Header set Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
   Header set Access-Control-Allow-Origin "*"
 
+  SSLProxyEngine on
+  
+  # Disabled but ready for support in next release
+  #<Location "/">
+  # UspEnableSubreq on
+  #</Location>
+
   # This specifies the address to fetch the .smil file from.
-  ProxyPass /remix-origin/ {{SMIL_URL}} connectiontimeout=5 timeout=30 disablereuse=on retry=0
-  ProxyPass / {{SMIL_URL}}
+  <Location "/">
+    ProxyPass "{{SMIL_URL}}"
+    ProxyPassReverse "{{SMIL_URL}}"
+  </Location>
+  
+  <Proxy "{{SMIL_URL}}">
+    ProxySet connectiontimeout=5 enablereuse=on keepalive=on retry=0 timeout=30 ttl=300
+    RequestHeader unset Accept-Encoding
+    {{S3_SECRET_KEY}}
+    {{S3_ACCESS_KEY}}
+    {{S3_REGION}}
+  </Proxy>
 
   # Transform the SMIL into a remixed MP4.
   <LocationMatch "\.smil$">
