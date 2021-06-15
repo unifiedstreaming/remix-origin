@@ -24,9 +24,9 @@ More detailed documentation is available at: <https://docs.unified-streaming.com
 
 Example
 -------
-The remix-origin is normally used in combination with a unified-origin (via IsmProxyPass). The remix-origin has a SMIL_URL defined which could be either a proxy or http based storage location where a smil file can be accessed. 
+The Remix-Origin is normally used in combination with a Unified-Origin (as a REMOTE location). The Remix-Origin has a SMIL_URL defined which could be either a proxy or http based storage location where a smil file can be accessed. 
 
-A HTTP get request for an mp4 files can be made by substituting the .smil for .mp4. in the url. The remix-origin will translate this request and provide a dref-mp4 in response. The response can then either be parse back to unfied-origin or written to disk for caching/performance benefits. 
+A HTTP get request for an mp4 files can be made by substituting the .smil for .mp4. in the url. The Remix-Origin will translate this request and provide a dref-mp4 in response. The response can then either be parse back to Unified-Origin or written to disk for caching/performance benefits. 
 
 ```bash
 # Unified Origin (Running on the same network range)
