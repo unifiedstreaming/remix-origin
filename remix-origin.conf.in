@@ -43,10 +43,10 @@ UspLicenseKey /etc/usp-license.key
 
   SSLProxyEngine on
   
-  # Disabled but ready for support in next release
-  #<Location "/">
-  # UspEnableSubreq on
-  #</Location>
+  # mod_unified_remix supports Apache sub-requests from 1.11.3 onwards
+  <Location "/">
+   UspEnableSubreq on
+  </Location>
 
   # This specifies the address to fetch the .smil file from.
   <Location "/">

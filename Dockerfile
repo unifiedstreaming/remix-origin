@@ -1,5 +1,5 @@
-ARG ALPINEVERSION=3.13
-ARG VERSION=1.11.1
+ARG ALPINEVERSION=3.14
+ARG VERSION=1.11.3
 
 FROM unifiedstreaming/origin:$VERSION
 LABEL maintainer "Unified Streaming <support@unified-streaming.com>"
